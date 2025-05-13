@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestial Visions | Magical Photography</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;500&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a192f;
+            --secondary: #172a45;
+            --accent: #64ffda;
+            --text: #e6f1ff;
+            --muted: #8892b0;
+            --gold: #d4af37;
+            --violet: #6d4a91;
+            --midnight: #1a1a2e;
+            --teal: #38b2ac;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary);
+            color: var(--text);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        .custom-cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: 0.1s ease;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+        }
+
+        .accent-text {
+            font-family: 'Tangerine', cursive;
+            color: var(--accent);
+            font-size: 2.5rem;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: transparent;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            transition: all 0.5s ease;
+            z-index: 1000;
+        }
+
+        .navbar-solid {
+            background-color: rgba(10, 25, 47, 0.95);
+        }
+
+        .navbar-brand {
+            color: var(--text);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: var(--text) !important;
+            margin: 0 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+            background-color: rgba(10, 25, 47, 0.3);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: fadeUp 1.5s ease forwards 0.5s;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--muted);
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--text);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                        -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            animation: glitch 1s infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                            -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                            0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            14% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                            -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                            0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                            0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                            -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                            0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                            -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                            0.05em 0 0 rgba(0, 255, 0, 0.75),
+                            0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                            0.05em 0 0 rgba(0, 255, 0, 0.75),
+                            0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
+                            -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
+                            -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+        }
+
+        /* Particles */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 8rem 0;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--secondary);
+        }
+
+        .about-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.1);
+        }
+
+        .about-content {
+            position: relative;
+            z-index: 2;
+            padding: 3rem;
+            border-radius: 15px;
+            background: rgba(23, 42, 69, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 1s ease;
+        }
+
+        .about-content.active {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .about-img {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .about-img img {
+            width: 100%;
+            height: auto;
+            filter: grayscale(30%);
+            transition: all 0.5s ease;
+        }
+
+        .about-img:hover img {
+            filter: grayscale(0);
+        }
+
+        .about-text {
+            padding: 2rem;
+        }
+
+        .about-title {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 4rem auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--accent);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .timeline-item.active {
+            opacity: 1;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+
+        .timeline-left {
+            left: 0;
+        }
+
+        .timeline-right {
+            left: 50%;
+        }
+
+        .timeline-left::after {
+            right: -10px;
+        }
+
+        .timeline-right::after {
+            left: -10px;
+        }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: rgba(23, 42, 69, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-year {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Gallery Section */
+        .portfolio-section {
+            padding: 8rem 0;
+            position: relative;
+            background-color: var(--primary);
+        }
+
+        .portfolio-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+
+        .filter-buttons {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .filter-btn {
+            background-color: transparent;
+            border: 1px solid var(--accent);
+            color: var(--text);
+            padding: 8px 20px;
+            margin: 0 5px 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .gallery-item {
+            width: calc(33.333% - 20px);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .gallery-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+            z-index: 2;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(10, 25, 47, 0.9), transparent);
+            padding: 20px;
+            color: var(--text);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-title {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .gallery-category {
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 25, 47, 0.95);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(23, 42, 69, 0.5);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+
+        .lightbox-nav:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(23, 42, 69, 0.8);
+            border-radius: 5px;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 8rem 0;
+            position: relative;
+            background-color: var(--secondary);
+        }
+
+        .testimonials-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .testimonial-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .testimonial-wrapper {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial {
+            min-width: 100%;
+            padding: 2rem;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.5s ease;
+        }
+
+        .testimonial.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .testimonial-content {
+            background-color: rgba(23, 42, 69, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 3rem;
+            position: relative;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-content::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 20px 20px 0;
+            border-style: solid;
+            border-color: rgba(23, 42, 69, 0.7) transparent transparent;
+        }
+
+        .testimonial-quote {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .testimonial-quote::before,
+        .testimonial-quote::after {
+            content: '"';
+            font-size: 4rem;
+            font-family: 'Georgia', serif;
+            position: absolute;
+            opacity: 0.3;
+            color: var(--accent);
+        }
+
+        .testimonial-quote::before {
+            top: -20px;
+            left: -10px;
+        }
+
+        .testimonial-quote::after {
+            bottom: -50px;
+            right: -10px;
+            transform: rotate(180deg);
+        }
+
+        .client-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .client-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .client-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .client-role {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .testimonial-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-dot.active {
+            background-color: var(--accent);
+            transform: scale(1.2);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 8rem 0;
+            position: relative;
+            background-color: var(--primary);
+        }
+
+        .contact-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .contact-info, .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-card {
+            background-color: rgba(23, 42, 69, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 3rem;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+
+        .contact-card.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+
+        .contact-text {
+            flex: 1;
+        }
+
+        .contact-text h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-text p {
+            color: var(--muted);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .form-label {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            color: var(--muted);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .form-control:focus ~ .form-label,
+        .form-control:not(:placeholder-shown) ~ .form-label {
+            top: -20px;
+            left: 0;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        .btn-submit {
+            background-color: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .form-success {
+            background-color: rgba(100, 255, 218, 0.2);
+            color: var(--accent);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--midnight);
+            padding: 4rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .footer-logo h3 {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .footer-text {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--accent);
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .footer-links {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .footer-links h4 {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .footer-links a::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+            padding-left: 20px;
+        }
+
+        .footer-newsletter {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .footer-newsletter h4 {
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-top: 15px;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 5px 0 0 5px;
+            color: var(--text);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .newsletter-btn {
+            background-color: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-btn:hover {
+            background-color: var(--teal);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--muted);
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(23, 42, 69, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        /* Claymorphism */
+        .clay-card {
+            background: rgba(23, 42, 69, 0.8);
+            border-radius: 20px;
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3),
+                        -10px -10px 30px rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border: none;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .gallery-item {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-left::after, .timeline-right::after {
+                left: 15px;
+            }
+            .timeline-right {
+                left: 0;
+            }
+            .contact-info, .contact-form {
+                flex: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .gallery-item {
+                width: 100%;
+            }
+            .footer-content > div {
+                flex: 100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Text Scramble Effect */
+        .scramble-text {
+            display: inline-block;
+        }
+
+        /* Magnetic Effect */
+        .magnetic {
+            position: relative;
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: all 0.5s ease;
+        }
+
+        .loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(100, 255, 218, 0.2);
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            color: var(--text);
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">ENTERING THE CELESTIAL REALM</div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-follower"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#hero">Celestial Visions</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#hero">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-bg"></div>
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Celestial Visions</h1>
+            <p class="hero-subtitle">Capturing the ethereal beauty beyond mortal sight</p>
+            <p class="accent-text">Journey through the lens of immortality</p>
+        </div>
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-bg"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="section-title">The Immortal Behind The Lens</h2>
+                </div>
+            </div>
+            <div class="row about-content">
+                <div class="col-lg-5">
+                    <div class="about-img">
+                        <img src="https://images.unsplash.com/photo-1600603405959-6d623e92445c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Photographer">
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="about-text">
+                        <h3 class="about-title">Ethereal Storytelling</h3>
+                        <p>Welcome to the realm where time stands still and moments become eternal. I am a guardian of memories, a collector of light, and a weaver of visual stories that transcend the boundaries of mortal perception.</p>
+                        <p>My journey began eons ago, when the stars were young and the universe was still finding its rhythm. Through my lens, I capture not just images, but the very essence of existence – the fleeting emotions, the silent whispers of nature, and the cosmic dance of light and shadow.</p>
+                        <p>Each photograph is a portal to another dimension, a fragment of time preserved in its purest form. My work is not merely about documenting what is visible, but revealing what lies beyond – the unseen currents of energy, the hidden narratives, and the sacred geometries that shape our reality.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h4 class="timeline-year">The Dawn of Vision</h4>
+                        <p>Discovered the power of capturing light and shadow, beginning a journey through the cosmos with nothing but curiosity and an ancient camera.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h4 class="timeline-year">The Celestial Odyssey</h4>
+                        <p>Traveled across dimensions, learning from master light-weavers and energy-shapers, perfecting the art of freezing time within a frame.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h4 class="timeline-year">The Ethereal Recognition</h4>
+                        <p>Work showcased in the Halls of Eternal Art, honored by the Council of Cosmic Creativity for innovations in visual storytelling.</p>
+                    </div>
+                </div>
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h4 class="timeline-year">The Present Revelation</h4>
+                        <p>Now sharing the collected wisdom and beauty with the mortal realm, bridging worlds through the universal language of visual poetry.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio-section">
+        <div class="portfolio-bg"></div>
+        <div class="container">
+            <h2 class="section-title">Celestial Portfolio</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Realms</button>
+                <button class="filter-btn" data-filter="cosmic">Cosmic</button>
+                <button class="filter-btn" data-filter="ethereal">Ethereal</button>
+                <button class="filter-btn" data-filter="elemental">Elemental</button>
+                <button class="filter-btn" data-filter="astral">Astral</button>
+            </div>
+
+            <div class="gallery">
+                <div class="gallery-item" data-category="cosmic">
+                    <img src="https://images.unsplash.com/photo-1536566482680-fca31930a0bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Cosmic Nebula">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Nebula's Whisper</h3>
+                        <p class="gallery-category">Cosmic</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="ethereal">
+                    <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1035&q=80" alt="Ethereal Forest">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Veils of Mist</h3>
+                        <p class="gallery-category">Ethereal</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="elemental">
+                    <img src="https://images.unsplash.com/photo-1585338107247-52a97d8f9292?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Fire Element">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Flames of Creation</h3>
+                        <p class="gallery-category">Elemental</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="astral">
+                    <img src="https://images.unsplash.com/photo-1642790106117-e829c51a47a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80" alt="Astral Projection">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Astral Voyager</h3>
+                        <p class="gallery-category">Astral</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="cosmic">
+                    <img src="https://images.unsplash.com/photo-1606489129187-1452d681cfb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Galaxy Clusters">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Clusters of Infinity</h3>
+                        <p class="gallery-category">Cosmic</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="ethereal">
+                    <img src="https://images.unsplash.com/photo-1621443450258-464f5cf76739?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80" alt="Light Beings">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Beings of Light</h3>
+                        <p class="gallery-category">Ethereal</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="elemental">
+                    <img src="https://images.unsplash.com/photo-1505672678657-cc7037095e60?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Water Element">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Liquid Memories</h3>
+                        <p class="gallery-category">Elemental</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="astral">
+                    <img src="https://images.unsplash.com/photo-1617981527498-8a51401867be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Dream Sequence">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Dreamwalker's Path</h3>
+                        <p class="gallery-category">Astral</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="cosmic">
+                    <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1822&q=80" alt="Cosmic Aurora">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-title">Aurora's Dance</h3>
+                        <p class="gallery-category">Cosmic</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lightbox -->
+        <div class="lightbox">
+            <span class="lightbox-close"><i class="fas fa-times"></i></span>
+            <div class="lightbox-content">
+                <img src="" alt="" class="lightbox-img">
+                <div class="lightbox-caption"></div>
+            </div>
+            <div class="lightbox-nav lightbox-prev"><i class="fas fa-chevron-left"></i></div>
+            <div class="lightbox-nav lightbox-next"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="testimonials-bg"></div>
+        <div class="container">
+            <h2 class="section-title">Ethereal Testimonials</h2>
+            <div class="testimonial-container">
+                <div class="testimonial-wrapper">
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p class="testimonial-quote">Working with Celestial Visions was truly a transcendent experience. The photographs captured not just our wedding day, but the very essence of our love – something I didn't think was possible to translate into an image.</p>
+                        </div>
+                        <div class="client-info">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" alt="Client" class="client-img">
+                            <h4 class="client-name">Aria Moonlight</h4>
+                            <p class="client-role">Ethereal Bride</p>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p class="testimonial-quote">There is something magical about how these images capture light. My portrait session revealed aspects of myself I never knew existed – it was like looking into a mirror that shows your soul rather than your face.</p>
+                        </div>
+                        <div class="client-info">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Client" class="client-img">
+                            <h4 class="client-name">Orion Stardust</h4>
+                            <p class="client-role">Visionary Entrepreneur</p>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <p class="testimonial-quote">Our fashion brand needed imagery that transcended conventional photography. The celestial aesthetic brought to our campaign elevated our designs to another dimension. Our customers felt the magic in every frame.</p>
+                        </div>
+                        <div class="client-info">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" alt="Client" class="client-img">
+                            <h4 class="client-name">Luna Eclipse</h4>
+                            <p class="client-role">Creative Director</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-dots">
+                    <span class="testimonial-dot active"></span>
+                    <span class="testimonial-dot"></span>
+                    <span class="testimonial-dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-bg"></div>
+        <div class="container">
+            <h2 class="section-title">Celestial Connection</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Ethereal Location</h4>
+                                <p>The Nexus of Realms, Cosmic Boulevard, Celestial Plane</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Astral Mail</h4>
+                                <p>contact@celestialvisions.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Telepathic Line</h4>
+                                <p>+1 888 CELESTIAL</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Timeless Hours</h4>
+                                <p>Always Present, Beyond Temporal Constraints</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <div class="contact-card">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="name" placeholder=" " required>
+                                <label for="name" class="form-label">Your Name</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" id="email" placeholder=" " required>
+                                <label for="email" class="form-label">Your Email</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="subject" placeholder=" " required>
+                                <label for="subject" class="form-label">Subject</label>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" id="message" rows="5" placeholder=" " required></textarea>
+                                <label for="message" class="form-label">Your Message</label>
+                            </div>
+                            <button type="submit" class="btn-submit">Send Cosmic Message</button>
+                        </form>
+                        <div class="form-success">Your message has been sent to the celestial realm. We will connect with you soon!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bg"></div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Celestial Visions</h3>
+                    <p class="footer-text">Capturing moments beyond mortal perception, preserving them for eternity. Our lens sees what others cannot – the hidden dimensions of beauty that exist in every moment.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Celestial Pages</h4>
+                    <ul>
+                        <li><a href="#hero">Home Realm</a></li>
+                        <li><a href="#about">About the Immortal</a></li>
+                        <li><a href="#portfolio">Cosmic Portfolio</a></li>
+                        <li><a href="#testimonials">Ethereal Testimonials</a></li>
+                        <li><a href="#contact">Astral Connection</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Magical Services</h4>
+                    <ul>
+                        <li><a href="#">Ethereal Portraits</a></li>
+                        <li><a href="#">Celestial Weddings</a></li>
+                        <li><a href="#">Cosmic Events</a></li>
+                        <li><a href="#">Astral Commercial</a></li>
+                        <li><a href="#">Interdimensional Travel</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Cosmic Newsletter</h4>
+                    <p class="footer-text">Subscribe to receive celestial inspiration and be the first to know about special offerings from beyond the veil.</p>
+                    <form class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                        <button type="submit" class="newsletter-btn"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Celestial Visions. All rights transcend mortal copyright.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Loader
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.querySelector('.loader').classList.add('fade-out');
+                setTimeout(function() {
+                    document.querySelector('.loader').style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        // Cursor Effects
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorFollower = document.querySelector('.custom-cursor-follower');
+        
+        document.addEventListener('mousemove', function(e) {
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.1
+            });
+            
+            gsap.to(cursorFollower, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.3
+            });
+        });
+
+        // Cursor trail effect
+        document.addEventListener('mousemove', function(e) {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            document.body.appendChild(trail);
+            
+            setTimeout(function() {
+                trail.style.opacity = '0.5';
+                trail.style.transform = 'scale(1.5) translate(-50%, -50%)';
+                
+                setTimeout(function() {
+                    trail.remove();
+                }, 500);
+            }, 10);
+        });
+
+        // Magnetic effect
+        const magneticElements = document.querySelectorAll('.magnetic');
+
+        magneticElements.forEach(magnetic => {
+            magnetic.addEventListener('mousemove', function(e) {
+                const position = magnetic.getBoundingClientRect();
+                const x = e.clientX - position.left - position.width / 2;
+                const y = e.clientY - position.top - position.height / 2;
+                
+                magnetic.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+            
+            magnetic.addEventListener('mouseout', function() {
+                magnetic.style.transform = 'translate(0px, 0px)';
+            });
+        });
+
+        // Text Scramble Effect
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                this.chars = '!<>-_\\/[]{}—=+*^?#________';
+                this.update = this.update.bind(this);
+            }
+            
+            setText(newText) {
+                const oldText = this.el.innerText;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40);
+                    const end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
+                }
+                
+                cancelAnimationFrame(this.frameRequest);
+                this.frame = 0;
+                this.update();
+                return promise;
+            }
+            
+            update() {
+                let output = '';
+                let complete = 0;
+                
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    
+                    if (this.frame >= end) {
+                        complete++;
+                        output += to;
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) {
+                            char = this.randomChar();
+                            this.queue[i].char = char;
+                        }
+                        output += `<span class="dud">${char}</span>`;
+                    } else {
+                        output += from;
+                    }
+                }
+                
+                this.el.innerHTML = output;
+                
+                if (complete === this.queue.length) {
+                    this.resolve();
+                } else {
+                    this.frameRequest = requestAnimationFrame(this.update);
+                    this.frame++;
+                }
+            }
+            
+            randomChar() {
+                return this.chars[Math.floor(Math.random() * this.chars.length)];
+            }
+        }
+
+        // Initialize Text Scramble on hero subtitle
+        const phrases = [
+            'Capturing the ethereal beauty beyond mortal sight',
+            'Weaving light into eternal stories',
+            'Where cosmic mysteries become visual poetry',
+            'Transcending dimensions through the lens'
+        ];
+
+        const el = document.querySelector('.hero-subtitle');
+        const fx = new TextScramble(el);
+
+        let counter = 0;
+        const next = () => {
+            fx.setText(phrases[counter]).then(() => {
+                setTimeout(next, 3000);
+            });
+            counter = (counter + 1) % phrases.length;
+        };
+
+        setTimeout(next, 3000);
+
+        // Tilt Effect
+        document.addEventListener('mousemove', function(e) {
+            const galleries = document.querySelectorAll('.gallery-item');
+            galleries.forEach(gallery => {
+                const rect = gallery.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+                    const xPercent = ((x / rect.width) - 0.5) * 20;
+                    const yPercent = ((y / rect.height) - 0.5) * 20;
+                    
+                    gallery.style.transform = `perspective(1000px) rotateX(${-yPercent}deg) rotateY(${xPercent}deg) scale3d(1.05, 1.05, 1.05)`;
+                } else {
+                    gallery.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                }
+            });
+        });
+
+        // Dynamic background images array
+        const backgroundImages = [
+            'https://images.unsplash.com/photo-1536566482680-fca31930a0bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
+            'https://images.unsplash.com/photo-1606489129187-1452d681cfb3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80',
+            'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1822&q=80',
+            'https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1194&q=80',
+            'https://images.unsplash.com/photo-1617981527498-8a51401867be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80'
+        ];
+
+        // Section background images
+        const aboutBgImages = [
+            'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1035&q=80',
+            'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80'
+        ];
+
+        const portfolioBgImages = [
+            'https://images.unsplash.com/photo-1505506874110-6a7a69069a08?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80',
+            'https://images.unsplash.com/photo-1536514498073-50e69d39c6cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80'
+        ];
+
+        const testimonialsBgImages = [
+            'https://images.unsplash.com/photo-1621443450258-464f5cf76739?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80',
+            'https://images.unsplash.com/photo-1642790106117-e829c51a47a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80'
+        ];
+
+        const contactBgImages = [
+            'https://images.unsplash.com/photo-1585338107247-52a97d8f9292?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80',
+            'https://images.unsplash.com/photo-1604076913837-52ab5629fba9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80'
+        ];
+
+        // Change hero background dynamically
+        let currentBgIndex = 0;
+        const heroBg = document.querySelector('.hero-bg');
+
+        function changeHeroBackground() {
+            heroBg.style.opacity = '0';
+            
+            setTimeout(() => {
+                heroBg.style.backgroundImage = `url(${backgroundImages[currentBgIndex]})`;
+                heroBg.style.opacity = '0.7';
+                currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+            }, 1000);
+        }
+
+        // Initial background
+        heroBg.style.backgroundImage = `url(${backgroundImages[0]})`;
+        setInterval(changeHeroBackground, 7000);
+
+        // Set background images for other sections
+        document.querySelector('.about-bg').style.backgroundImage = `url(${aboutBgImages[0]})`;
+        document.querySelector('.portfolio-bg').style.backgroundImage = `url(${portfolioBgImages[0]})`;
+        document.querySelector('.testimonials-bg').style.backgroundImage = `url(${testimonialsBgImages[0]})`;
+        document.querySelector('.contact-bg').style.backgroundImage = `url(${contactBgImages[0]})`;
+        document.querySelector('.footer-bg').style.backgroundImage = `url(${backgroundImages[2]})`;
+
+        // Change section backgrounds on scroll or after time intervals
+        let aboutBgIndex = 0;
+        let portfolioBgIndex = 0;
+        let testimonialsBgIndex = 0;
+        let contactBgIndex = 0;
+
+        setInterval(() => {
+            aboutBgIndex = (aboutBgIndex + 1) % aboutBgImages.length;
+            document.querySelector('.about-bg').style.backgroundImage = `url(${aboutBgImages[aboutBgIndex]})`;
+        }, 15000);
+
+        setInterval(() => {
+            portfolioBgIndex = (portfolioBgIndex + 1) % portfolioBgImages.length;
+            document.querySelector('.portfolio-bg').style.backgroundImage = `url(${portfolioBgImages[portfolioBgIndex]})`;
+        }, 18000);
+
+        setInterval(() => {
+            testimonialsBgIndex = (testimonialsBgIndex + 1) % testimonialsBgImages.length;
+            document.querySelector('.testimonials-bg').style.backgroundImage = `url(${testimonialsBgImages[testimonialsBgIndex]})`;
+        }, 20000);
+
+        setInterval(() => {
+            contactBgIndex = (contactBgIndex + 1) % contactBgImages.length;
+            document.querySelector('.contact-bg').style.backgroundImage = `url(${contactBgImages[contactBgIndex]})`;
+        }, 22000);
+
+        // Initialize particles.js
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 120,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": false,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "bubble"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 200,
+                        "size": 4,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        // Scroll animations with GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                document.querySelector('.navbar').classList.add('navbar-solid');
+            } else {
+                document.querySelector('.navbar').classList.remove('navbar-solid');
+            }
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Back to top button
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 700) {
+                document.querySelector('.back-to-top').classList.add('active');
+            } else {
+                document.querySelector('.back-to-top').classList.remove('active');
+            }
+        });
+
+        document.querySelector('.back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Scroll down button
+        document.querySelector('.scroll-down').addEventListener('click', function() {
+            window.scrollTo({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        });
+
+        // About section animations
+        gsap.to('.about-content', {
+            scrollTrigger: {
+                trigger: '.about-section',
+                start: 'top 70%',
+                onEnter: () => document.querySelector('.about-content').classList.add('active')
+            }
+        });
+
+        // Timeline animations
+        document.querySelectorAll('.timeline-item').forEach((item, index) => {
+            gsap.to(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 80%',
+                    onEnter: () => {
+                        setTimeout(() => {
+                            item.classList.add('active');
+                        }, index * 200);
+                    }
+                }
+            });
+        });
+
+        // Gallery animations
+        document.querySelectorAll('.gallery-item').forEach((item, index) => {
+            gsap.to(item, {
+                scrollTrigger: {
+                    trigger: '.gallery',
+                    start: 'top 80%',
+                    onEnter: () => {
+                        setTimeout(() => {
+                            item.classList.add('show');
+                        }, index * 100);
+                    }
+                }
+            });
+        });
+
+        // Portfolio filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                
+                // Filter gallery items
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.classList.add('show');
+                        }, 100);
+                    } else {
+                        item.classList.remove('show');
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const lightbox = document.querySelector('.lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const lightboxCaption = document.querySelector('.lightbox-caption');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const lightboxPrev = document.querySelector('.lightbox-prev');
+        const lightboxNext = document.querySelector('.lightbox-next');
+        let currentImgIndex = 0;
+        let visibleGalleryItems = [];
+
+        function updateVisibleItems() {
+            visibleGalleryItems = Array.from(galleryItems).filter(item => item.style.display !== 'none');
+        }
+
+        function openLightbox(index) {
+            updateVisibleItems();
+            currentImgIndex = index;
+            
+            const item = visibleGalleryItems[currentImgIndex];
+            const imgSrc = item.querySelector('img').src;
+            const title = item.querySelector('.gallery-title').textContent;
+            const category = item.querySelector('.gallery-category').textContent;
+            
+            lightboxImg.src = imgSrc;
+            lightboxCaption.innerHTML = `<h3>${title}</h3><p>${category}</p>`;
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function nextImage() {
+            currentImgIndex = (currentImgIndex + 1) % visibleGalleryItems.length;
+            
+            const item = visibleGalleryItems[currentImgIndex];
+            const imgSrc = item.querySelector('img').src;
+            const title = item.querySelector('.gallery-title').textContent;
+            const category = item.querySelector('.gallery-category').textContent;
+            
+            lightboxImg.style.opacity = '0';
+            
+            setTimeout(() => {
+                lightboxImg.src = imgSrc;
+                lightboxCaption.innerHTML = `<h3>${title}</h3><p>${category}</p>`;
+                lightboxImg.style.opacity = '1';
+            }, 300);
+        }
+
+        function prevImage() {
+            currentImgIndex = (currentImgIndex - 1 + visibleGalleryItems.length) % visibleGalleryItems.length;
+            
+            const item = visibleGalleryItems[currentImgIndex];
+            const imgSrc = item.querySelector('img').src;
+            const title = item.querySelector('.gallery-title').textContent;
+            const category = item.querySelector('.gallery-category').textContent;
+            
+            lightboxImg.style.opacity = '0';
+            
+            setTimeout(() => {
+                lightboxImg.src = imgSrc;
+                lightboxCaption.innerHTML = `<h3>${title}</h3><p>${category}</p>`;
+                lightboxImg.style.opacity = '1';
+            }, 300);
+        }
+
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                openLightbox(index);
+            });
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxNext.addEventListener('click', nextImage);
+        lightboxPrev.addEventListener('click', prevImage);
+
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (!lightbox.classList.contains('active')) return;
+            
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowRight') {
+                nextImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
+            }
+        });
+
+        // Testimonial slider
+        const testimonials = document.querySelectorAll('.testimonial');
+        const testimonialDots = document.querySelectorAll('.testimonial-dot');
+        let currentTestimonial = 0;
+
+        function showTestimonial(index) {
+            document.querySelector('.testimonial-wrapper').style.transform = `translateX(-${index * 100}%)`;
+            
+            testimonials.forEach(testimonial => testimonial.classList.remove('active'));
+            testimonials[index].classList.add('active');
+            
+            testimonialDots.forEach(dot => dot.classList.remove('active'));
+            testimonialDots[index].classList.add('active');
+            
+            currentTestimonial = index;
+        }
+
+        testimonialDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showTestimonial(index);
+            });
+        });
+
+        // Auto rotate testimonials
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }, 6000);
+
+        // Show first testimonial
+        testimonials[0].classList.add('active');
+
+        // Contact form animations
+        gsap.to('.contact-card', {
+            scrollTrigger: {
+                trigger: '.contact-section',
+                start: 'top 70%',
+                onEnter: () => {
+                    document.querySelectorAll('.contact-card').forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('active');
+                        }, index * 200);
+                    });
+                }
+            }
+        });
+
+        // Contact form submission
+        const contactForm = document.getElementById('contactForm');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple form validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (name && email && subject && message) {
+                // Normally would send data to server here
+                
+                // Show success message
+                document.querySelector('.form-success').style.display = 'block';
+                
+                // Reset form
+                contactForm.reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.querySelector('.form-success').style.display = 'none';
+                }, 5000);
+            }
+        });
+
+        // Newsletter form
+        const newsletterForm = document.querySelector('.newsletter-form');
+        
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = this.querySelector('.newsletter-input').value;
+            
+            if (email) {
+                // Normally would send data to server here
+                
+                // Show feedback to user
+                alert('Thank you for subscribing to our cosmic newsletter!');
+                
+                // Reset form
+                this.reset();
+            }
+        });
+    </script>
+</body>
+</html>
